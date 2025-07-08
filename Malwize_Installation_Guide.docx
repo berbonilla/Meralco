@@ -1,0 +1,1039 @@
+# MALWIZE MALWARE ANALYSIS PLATFORM
+## Complete Installation & User Manual
+
+---
+
+**Version:** 1.0  
+**Date:** July 2025  
+**Platform:** Linux/Unix Systems & Windows 11  
+**Author:** Malwize Development Team  
+
+---
+
+## TABLE OF CONTENTS
+
+1. [System Requirements](#system-requirements)
+2. [Linux Installation](#linux-installation)
+3. [Windows 11 Installation](#windows-11-installation)
+4. [Python Environment Setup](#python-environment-setup)
+5. [Dependencies Installation](#dependencies-installation)
+6. [API Configuration](#api-configuration)
+7. [Backend Installation](#backend-installation)
+8. [Frontend Installation](#frontend-installation)
+9. [Server Management](#server-management)
+10. [Usage Examples](#usage-examples)
+11. [Troubleshooting](#troubleshooting)
+12. [Security Considerations](#security-considerations)
+13. [Maintenance](#maintenance)
+14. [Project Structure & Cleanup](#appendix-a-project-structure--cleanup)
+
+---
+
+## 1. SYSTEM REQUIREMENTS
+
+### Minimum Requirements:
+- **Operating System:** 
+  - Linux (Ubuntu 18.04+, CentOS 7+, or similar)
+  - Windows 11 (with WSL2 or native Python)
+- **Python:** 3.8 or higher
+- **RAM:** 4GB minimum, 8GB recommended
+- **Storage:** 10GB available space
+- **Network:** Internet connection for API access
+
+### Recommended Requirements:
+- **Operating System:** 
+  - Ubuntu 20.04 LTS or newer
+  - Windows 11 with WSL2 Ubuntu
+- **Python:** 3.9 or higher
+- **RAM:** 16GB
+- **Storage:** 50GB SSD
+- **Network:** Stable broadband connection
+
+---
+
+## 2. LINUX INSTALLATION
+
+### Step 1: Update System Packages
+```bash
+sudo apt update && sudo apt upgrade -y
+```
+
+### Step 2: Install Essential Build Tools
+```bash
+sudo apt install -y build-essential python3-dev python3-pip python3-venv
+sudo apt install -y curl wget git unzip
+```
+
+### Step 3: Install Additional System Dependencies
+```bash
+# For SSL/TLS support
+sudo apt install -y libssl-dev libffi-dev
+
+# For compression libraries
+sudo apt install -y zlib1g-dev libbz2-dev
+
+# For XML processing
+sudo apt install -y libxml2-dev libxslt-dev
+
+# For database support (if needed)
+sudo apt install -y libsqlite3-dev
+```
+
+### Step 4: Verify Python Installation
+```bash
+python3 --version
+pip3 --version
+```
+
+**Expected Output:**
+```
+Python 3.8.10
+pip 20.0.2 from /usr/lib/python3/dist-packages/pip (python 3.8)
+```
+
+---
+
+## 3. WINDOWS 11 INSTALLATION
+
+### Method 1: Using WSL2 (Recommended)
+
+#### Step 1: Enable WSL2
+Open PowerShell as Administrator and run:
+```powershell
+# Enable WSL feature
+dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
+
+# Enable Virtual Machine feature
+dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
+
+# Restart your computer
+Restart-Computer
+```
+
+#### Step 2: Install WSL2
+```powershell
+# Install WSL2
+wsl --install
+
+# Set WSL2 as default
+wsl --set-default-version 2
+```
+
+#### Step 3: Install Ubuntu on WSL2
+```powershell
+# Install Ubuntu
+wsl --install -d Ubuntu
+
+# Or download from Microsoft Store: Ubuntu 22.04 LTS
+```
+
+#### Step 4: Access WSL2 Ubuntu
+```powershell
+# Open WSL2 Ubuntu
+wsl
+
+# Or open Ubuntu from Start Menu
+```
+
+#### Step 5: Follow Linux Installation Steps
+Once in WSL2 Ubuntu, follow the Linux installation steps above.
+
+### Method 2: Native Windows Installation
+
+#### Step 1: Install Python for Windows
+1. Download Python 3.9+ from [python.org](https://www.python.org/downloads/)
+2. Run installer with "Add Python to PATH" checked
+3. Verify installation:
+```cmd
+python --version
+pip --version
+```
+
+#### Step 2: Install Git for Windows
+1. Download from [git-scm.com](https://git-scm.com/download/win)
+2. Install with default settings
+3. Verify installation:
+```cmd
+git --version
+```
+
+#### Step 3: Install Visual Studio Build Tools
+1. Download from [Microsoft Visual Studio](https://visualstudio.microsoft.com/downloads/)
+2. Install "Build Tools for Visual Studio 2022"
+3. Select "C++ build tools" workload
+
+#### Step 4: Install Additional Windows Dependencies
+```cmd
+# Install Windows Subsystem for Linux (if not using WSL2)
+# This provides Unix-like environment for some dependencies
+
+# Or use Chocolatey package manager
+# Install Chocolatey first: https://chocolatey.org/install
+choco install curl wget unzip
+```
+
+### Windows-Specific Commands
+
+#### Create Project Directory (Windows)
+```cmd
+mkdir C:\malwize
+cd C:\malwize
+```
+
+#### Clone Repository (Windows)
+```cmd
+git clone <your-repo-url> .
+```
+
+#### Create Virtual Environment (Windows)
+```cmd
+python -m venv venv
+venv\Scripts\activate
+```
+
+#### Install Dependencies (Windows)
+```cmd
+pip install -r requirements.txt
+```
+
+#### Start Servers (Windows)
+```cmd
+# Backend
+uvicorn scanner_api:app --reload --host 0.0.0.0 --port 8000
+
+# Frontend (in new terminal)
+python pages/robust_server.py
+```
+
+#### Windows Management Scripts
+Create `start_servers.bat`:
+```batch
+@echo off
+echo 🚀 Starting Malwize servers...
+
+echo 📡 Starting backend API server...
+start "Backend Server" cmd /k "uvicorn scanner_api:app --reload --host 0.0.0.0 --port 8000"
+
+echo 🌐 Starting frontend server...
+start "Frontend Server" cmd /k "python pages/robust_server.py"
+
+echo ✅ Servers started successfully!
+echo 📡 Backend: http://localhost:8000
+echo 🌐 Frontend: http://localhost:8080
+echo 📚 API Docs: http://localhost:8000/docs
+pause
+```
+
+Create `check_status.bat`:
+```batch
+@echo off
+echo 🔍 Checking Malwize server status...
+
+netstat -an | findstr ":8000"
+netstat -an | findstr ":8080"
+
+echo.
+echo 🔌 Port Status:
+netstat -an | findstr ":8000"
+netstat -an | findstr ":8080"
+pause
+```
+
+Create `stop_servers.bat`:
+```batch
+@echo off
+echo 🛑 Stopping Malwize servers...
+
+taskkill /f /im python.exe
+taskkill /f /im uvicorn.exe
+
+echo ✅ Servers stopped
+pause
+```
+
+---
+
+## 4. PYTHON ENVIRONMENT SETUP
+
+### Linux/WSL2:
+```bash
+# Create project directory
+mkdir -p ~/malwize
+cd ~/malwize
+
+# Clone repository
+git clone <your-repo-url> .
+
+# Create virtual environment
+python3 -m venv venv
+source venv/bin/activate
+
+# Verify activation
+which python
+which pip
+```
+
+### Windows Native:
+```cmd
+# Create project directory
+mkdir C:\malwize
+cd C:\malwize
+
+# Clone repository
+git clone <your-repo-url> .
+
+# Create virtual environment
+python -m venv venv
+venv\Scripts\activate
+
+# Verify activation
+where python
+where pip
+```
+
+### Upgrade pip and setuptools
+```bash
+# Linux/WSL2
+pip install --upgrade pip setuptools wheel
+
+# Windows
+pip install --upgrade pip setuptools wheel
+```
+
+---
+
+## 5. DEPENDENCIES INSTALLATION
+
+### Step 1: Install Core Python Dependencies
+```bash
+# Linux/WSL2
+pip install -r requirements.txt
+
+# Windows
+pip install -r requirements.txt
+```
+
+### Step 2: Manual Installation of Critical Dependencies
+```bash
+# FastAPI and ASGI server
+pip install fastapi uvicorn[standard]
+
+# HTTP client libraries
+pip install httpx aiohttp requests
+
+# Data processing
+pip install pandas numpy
+
+# Security and cryptography
+pip install cryptography pycryptodome
+
+# File handling
+pip install python-multipart
+
+# Logging and monitoring
+pip install structlog
+
+# Optional: Development tools
+pip install pytest black flake8
+```
+
+### Step 3: Verify Installation
+```bash
+python -c "import fastapi, uvicorn, httpx, pandas; print('All dependencies installed successfully!')"
+```
+
+**Expected Output:**
+```
+All dependencies installed successfully!
+```
+
+### Step 4: Check Installed Packages
+```bash
+pip list
+```
+
+---
+
+## 6. API CONFIGURATION
+
+### Step 1: Create API Keys File
+```bash
+# Linux/WSL2
+touch api_keys.txt
+
+# Windows
+echo. > api_keys.txt
+```
+
+### Step 2: Configure API Keys
+Edit `api_keys.txt` with your API keys:
+
+```bash
+# Linux/WSL2
+cat > api_keys.txt << 'EOF'
+# VirusTotal API Configuration
+VIRUSTOTAL_API_KEY=your_virustotal_api_key_here
+
+# AbuseIPDB API Configuration  
+ABUSEIPDB_API_KEY=your_abuseipdb_api_key_here
+
+# Optional: Additional API keys
+# CENSYS_API_KEY=your_censys_api_key_here
+# SHODAN_API_KEY=your_shodan_api_key_here
+EOF
+```
+
+```cmd
+# Windows
+echo # VirusTotal API Configuration > api_keys.txt
+echo VIRUSTOTAL_API_KEY=your_virustotal_api_key_here >> api_keys.txt
+echo # AbuseIPDB API Configuration >> api_keys.txt
+echo ABUSEIPDB_API_KEY=your_abuseipdb_api_key_here >> api_keys.txt
+```
+
+### Step 3: Set Proper Permissions
+```bash
+# Linux/WSL2
+chmod 600 api_keys.txt
+
+# Windows (if using WSL2)
+chmod 600 api_keys.txt
+```
+
+### Step 4: Verify Configuration
+```bash
+python -c "
+import os
+from dotenv import load_dotenv
+load_dotenv('api_keys.txt')
+print('API Keys loaded successfully')
+"
+```
+
+---
+
+## 7. BACKEND INSTALLATION
+
+### Step 1: Verify Project Structure
+```bash
+# Linux/WSL2
+ls -la
+
+# Windows
+dir
+```
+
+**Expected File Structure:**
+```
+Api/
+├── scanner_api.py              # Main FastAPI backend
+├── api_keys.txt                # API configuration
+├── requirements.txt            # Python dependencies
+├── Malwize_Installation_Guide.docx  # This installation guide
+├── selenium_qa_test.py        # QA testing script
+├── start_servers.sh           # Server management (Linux/WSL2)
+├── check_status.sh            # Status checking (Linux/WSL2)
+├── pages/                     # Frontend application
+│   ├── index.html            # Main entry point
+│   ├── upload.html           # File upload interface
+│   ├── hash_input.html       # Manual hash input
+│   ├── spreadsheet.html      # Spreadsheet integration
+│   ├── results.html          # Results and analytics
+│   ├── log.html              # Activity log viewer
+│   ├── dashboard.html        # Dashboard page
+│   ├── style.css             # Shared styles
+│   ├── script.js             # Shared JavaScript
+│   ├── robust_server.py      # Frontend server
+│   └── favicon.ico           # Site icon
+└── test_artifacts/           # QA test results
+    ├── qa_*.png             # Test screenshots
+    └── manager_*.png        # User scenario screenshots
+```
+
+### Step 2: Verify Backend Files
+```bash
+# Linux/WSL2
+ls -la scanner_api.py
+
+# Windows
+dir scanner_api.py
+```
+
+### Step 2: Test Backend Import
+```bash
+python -c "import scanner_api; print('Backend modules loaded successfully')"
+```
+
+### Step 3: Start Backend Server
+```bash
+# Linux/WSL2
+uvicorn scanner_api:app --reload --host 0.0.0.0 --port 8000
+
+# Windows
+uvicorn scanner_api:app --reload --host 0.0.0.0 --port 8000
+```
+
+**Expected Output:**
+```
+INFO:     Started server process [xxxxx]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+```
+
+### Step 4: Test API Endpoints
+```bash
+# Linux/WSL2
+curl -X GET "http://localhost:8000/docs"
+
+# Windows (if curl is available)
+curl -X GET "http://localhost:8000/docs"
+
+# Or use PowerShell
+Invoke-WebRequest -Uri "http://localhost:8000/docs" -Method GET
+```
+
+### Step 5: Verify All Components
+```bash
+# Check if all essential files are present
+ls -la scanner_api.py api_keys.txt requirements.txt start_servers.sh check_status.sh
+
+# Check frontend directory
+ls -la pages/
+
+# Check if virtual environment is active
+which python
+pip list | grep fastapi
+```
+
+---
+
+## 8. FRONTEND INSTALLATION
+
+### Step 1: Verify Frontend Files
+```bash
+# Linux/WSL2
+ls -la pages/
+
+# Windows
+dir pages\
+```
+
+### Step 2: Start Frontend Server
+```bash
+# Linux/WSL2
+python3 pages/robust_server.py
+
+# Windows
+python pages/robust_server.py
+```
+
+**Expected Output:**
+```
+🚀 Malwize Frontend Server
+📍 Serving on http://0.0.0.0:8080
+📁 Directory: /path/to/pages
+⚡ Press Ctrl+C to stop
+```
+
+### Step 3: Test Frontend Access
+Open browser and navigate to: `http://localhost:8080`
+
+---
+
+## 9. SERVER MANAGEMENT
+
+### Linux/WSL2 Management Scripts
+
+#### Step 1: Create Management Scripts
+```bash
+cat > start_servers.sh << 'EOF'
+#!/bin/bash
+echo "🚀 Starting Malwize servers..."
+
+# Start backend
+echo "📡 Starting backend API server..."
+uvicorn scanner_api:app --reload --host 0.0.0.0 --port 8000 &
+BACKEND_PID=$!
+
+# Start frontend
+echo "🌐 Starting frontend server..."
+python3 pages/robust_server.py &
+FRONTEND_PID=$!
+
+echo "✅ Servers started successfully!"
+echo "📡 Backend: http://localhost:8000"
+echo "🌐 Frontend: http://localhost:8080"
+echo "📚 API Docs: http://localhost:8000/docs"
+
+# Save PIDs for later use
+echo $BACKEND_PID > .backend.pid
+echo $FRONTEND_PID > .frontend.pid
+EOF
+
+chmod +x start_servers.sh
+```
+
+#### Step 2: Create Status Check Script
+```bash
+cat > check_status.sh << 'EOF'
+#!/bin/bash
+echo "🔍 Checking Malwize server status..."
+
+# Check backend
+if pgrep -f "uvicorn.*scanner_api" > /dev/null; then
+    echo "✅ Backend API server is running"
+    echo "   Port: 8000"
+    echo "   PID: $(pgrep -f 'uvicorn.*scanner_api')"
+else
+    echo "❌ Backend API server is not running"
+fi
+
+# Check frontend
+if pgrep -f "robust_server.py" > /dev/null; then
+    echo "✅ Frontend server is running"
+    echo "   Port: 8080"
+    echo "   PID: $(pgrep -f 'robust_server.py')"
+else
+    echo "❌ Frontend server is not running"
+fi
+
+# Check ports
+echo ""
+echo "🔌 Port Status:"
+netstat -tlnp | grep -E ':(8000|8080)'
+EOF
+
+chmod +x check_status.sh
+```
+
+#### Step 3: Create Stop Script
+```bash
+cat > stop_servers.sh << 'EOF'
+#!/bin/bash
+echo "🛑 Stopping Malwize servers..."
+
+# Stop backend
+pkill -f "uvicorn.*scanner_api"
+echo "✅ Backend server stopped"
+
+# Stop frontend
+pkill -f "robust_server.py"
+echo "✅ Frontend server stopped"
+
+# Clean up PID files
+rm -f .backend.pid .frontend.pid
+echo "🧹 Cleanup completed"
+EOF
+
+chmod +x stop_servers.sh
+```
+
+### Windows Management Scripts
+
+#### Step 1: Create Windows Batch Files
+```batch
+@echo off
+echo 🚀 Starting Malwize servers...
+
+echo 📡 Starting backend API server...
+start "Backend Server" cmd /k "uvicorn scanner_api:app --reload --host 0.0.0.0 --port 8000"
+
+echo 🌐 Starting frontend server...
+start "Frontend Server" cmd /k "python pages/robust_server.py"
+
+echo ✅ Servers started successfully!
+echo 📡 Backend: http://localhost:8000
+echo 🌐 Frontend: http://localhost:8080
+echo 📚 API Docs: http://localhost:8000/docs
+pause
+```
+
+#### Step 2: Create Status Check Script
+```batch
+@echo off
+echo 🔍 Checking Malwize server status...
+
+netstat -an | findstr ":8000"
+netstat -an | findstr ":8080"
+
+echo.
+echo 🔌 Port Status:
+netstat -an | findstr ":8000"
+netstat -an | findstr ":8080"
+pause
+```
+
+#### Step 3: Create Stop Script
+```batch
+@echo off
+echo 🛑 Stopping Malwize servers...
+
+taskkill /f /im python.exe
+taskkill /f /im uvicorn.exe
+
+echo ✅ Servers stopped
+pause
+```
+
+---
+
+## 10. USAGE EXAMPLES
+
+### Linux/WSL2 Examples:
+```bash
+# Start all servers
+./start_servers.sh
+
+# Check server status
+./check_status.sh
+
+# Stop all servers
+./stop_servers.sh
+```
+
+### Windows Examples:
+```cmd
+# Start all servers
+start_servers.bat
+
+# Check server status
+check_status.bat
+
+# Stop all servers
+stop_servers.bat
+```
+
+### Cross-Platform Examples:
+```bash
+# API usage
+curl -X POST "http://localhost:8000/upload/hashes_txt/" -F "file=@hashes.txt"
+
+# Check API documentation
+curl -X GET "http://localhost:8000/docs"
+```
+
+---
+
+## 11. TROUBLESHOOTING
+
+### Linux/WSL2 Issues:
+
+#### Issue 1: Port Already in Use
+```bash
+# Check what's using the ports
+sudo lsof -i :8000
+sudo lsof -i :8080
+
+# Kill processes using the ports
+sudo pkill -f uvicorn
+sudo pkill -f robust_server.py
+```
+
+#### Issue 2: Python Dependencies Missing
+```bash
+# Reinstall dependencies
+pip install -r requirements.txt --force-reinstall
+
+# Install specific missing package
+pip install fastapi uvicorn httpx
+```
+
+### Windows Issues:
+
+#### Issue 1: Python Not Found
+```cmd
+# Check Python installation
+python --version
+
+# If not found, add Python to PATH
+# Or reinstall Python with "Add to PATH" checked
+```
+
+#### Issue 2: Port Already in Use (Windows)
+```cmd
+# Check what's using the ports
+netstat -ano | findstr :8000
+netstat -ano | findstr :8080
+
+# Kill processes using the ports
+taskkill /f /pid <PID_NUMBER>
+```
+
+#### Issue 3: WSL2 Network Issues
+```powershell
+# Restart WSL2
+wsl --shutdown
+wsl
+
+# Or restart the WSL service
+Restart-Service LxssManager
+```
+
+### Cross-Platform Issues:
+
+#### Issue 4: API Key Issues
+```bash
+# Verify API keys file
+cat api_keys.txt
+
+# Test API key loading
+python -c "
+import os
+from dotenv import load_dotenv
+load_dotenv('api_keys.txt')
+print('VT Key:', os.getenv('VIRUSTOTAL_API_KEY')[:10] + '...')
+"
+```
+
+#### Issue 5: Virtual Environment Issues
+```bash
+# Linux/WSL2
+deactivate
+rm -rf venv
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+
+# Windows
+deactivate
+rmdir /s venv
+python -m venv venv
+venv\Scripts\activate
+pip install -r requirements.txt
+```
+
+---
+
+## 12. SECURITY CONSIDERATIONS
+
+### API Key Security:
+- Never commit API keys to version control
+- Use environment variables in production
+- Rotate API keys regularly
+- Monitor API usage and rate limits
+
+### Network Security:
+- Use HTTPS in production
+- Configure firewall rules
+- Implement proper authentication
+- Regular security updates
+
+### File Security:
+```bash
+# Linux/WSL2
+chmod 600 api_keys.txt
+chmod 755 *.sh
+chmod 644 *.py
+
+# Windows (if using WSL2)
+chmod 600 api_keys.txt
+```
+
+---
+
+## 13. MAINTENANCE
+
+### Regular Updates:
+```bash
+# Linux/WSL2
+sudo apt update && sudo apt upgrade
+
+# Windows
+# Update through Windows Update
+
+# Python dependencies (both platforms)
+pip install -r requirements.txt --upgrade
+
+# Update the application
+git pull origin main
+```
+
+### Log Management:
+```bash
+# Linux/WSL2
+tail -f /var/log/syslog | grep malwize
+
+# Windows
+# Check Event Viewer for application logs
+```
+
+### Backup Procedures:
+```bash
+# Linux/WSL2
+tar -czf malwize_backup_$(date +%Y%m%d).tar.gz \
+  api_keys.txt requirements.txt scanner_api.py selenium_qa_test.py pages/ test_artifacts/
+
+# Windows
+# Use Windows Backup or copy files manually
+```
+
+### Performance Monitoring:
+```bash
+# Linux/WSL2
+htop
+netstat -tlnp | grep -E ':(8000|8080)'
+df -h
+
+# Windows
+# Use Task Manager or Resource Monitor
+```
+
+---
+
+## APPENDIX A: PROJECT STRUCTURE & CLEANUP
+
+### Current File Structure (After Cleanup)
+The project has been cleaned up to remove duplicate and redundant files. The current structure contains only essential files:
+
+#### Root Directory Files:
+- **`scanner_api.py`** - Main FastAPI backend application
+- **`api_keys.txt`** - API configuration file
+- **`requirements.txt`** - Python dependencies
+- **`Malwize_Installation_Guide.docx`** - This installation guide
+- **`selenium_qa_test.py`** - QA testing automation script
+- **`start_servers.sh`** - Server management script (Linux/WSL2)
+- **`check_status.sh`** - Status checking script (Linux/WSL2)
+
+#### Frontend Directory (`pages/`):
+- **`index.html`** - Main entry point
+- **`upload.html`** - File upload interface
+- **`hash_input.html`** - Manual hash input
+- **`spreadsheet.html`** - Spreadsheet integration
+- **`results.html`** - Results and analytics
+- **`log.html`** - Activity log viewer
+- **`dashboard.html`** - Dashboard page
+- **`style.css`** - Shared styles
+- **`script.js`** - Shared JavaScript
+- **`robust_server.py`** - Frontend server
+- **`favicon.ico`** - Site icon
+
+#### Test Artifacts (`test_artifacts/`):
+- **`qa_*.png`** - QA test screenshots
+- **`manager_*.png`** - User scenario screenshots
+
+### Removed Files (Cleanup Summary)
+The following files were removed during cleanup as they were duplicates or had functionality integrated into the main application:
+
+1. **`scanner_v2.py`** - Command-line version (functionality covered by `scanner_api.py`)
+2. **`bulk_scan_cve.py`** - Standalone CVE scanner (functionality integrated into main API)
+3. **`README.md`** - Redundant with installation guide
+4. **`API_GUIDE.md`** - Redundant with installation guide
+5. **`FINALIZATION_SUMMARY.md`** - Development summary (not needed for production)
+6. **`samples.zip`** - Test file (not needed for production)
+7. **`scanner-gui`** - Empty file
+
+### Benefits of Cleanup
+- **Reduced Confusion**: Eliminated duplicate files with similar functions
+- **Simplified Maintenance**: Fewer files to maintain and update
+- **Clearer Structure**: Root directory now contains only essential files
+- **Production Ready**: Removed development artifacts and test files
+- **Updated Documentation**: Installation guide reflects current file structure
+
+### Additional Documentation
+- **`CLEANUP_SUMMARY.md`** - Detailed summary of the cleanup process and current file structure
+- **`test_artifacts/`** - QA test results and screenshots for verification
+
+---
+
+## APPENDIX B: COMPLETE DEPENDENCIES LIST
+
+### Core Dependencies:
+```
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+httpx==0.25.2
+aiohttp==3.9.1
+requests==2.31.0
+pandas==2.1.4
+numpy==1.25.2
+python-multipart==0.0.6
+structlog==23.2.0
+cryptography==41.0.8
+pycryptodome==3.19.0
+python-dotenv==1.0.0
+```
+
+### Development Dependencies:
+```
+pytest==7.4.3
+black==23.11.0
+flake8==6.1.0
+mypy==1.7.1
+```
+
+### System Dependencies (Linux/WSL2):
+```
+build-essential
+python3-dev
+python3-pip
+python3-venv
+libssl-dev
+libffi-dev
+zlib1g-dev
+libbz2-dev
+libxml2-dev
+libxslt-dev
+```
+
+### Windows Dependencies:
+```
+Python 3.9+
+Git for Windows
+Visual Studio Build Tools
+Chocolatey (optional)
+```
+
+---
+
+## APPENDIX C: LOG EXAMPLES
+
+### Backend API Logs:
+```
+INFO:     127.0.0.1:57082 - "POST /upload/hashes_txt/ HTTP/1.1" 200 OK
+2025-07-08 11:42:46,261 [INFO] 📋 Loaded 1 already scanned hashes from output/merged_results.csv
+2025-07-08 11:42:46,262 [INFO] 🚀 Starting optimized batch processing: 1 hashes in 1 batches
+2025-07-08 11:42:55,085 [INFO] ✅ Optimized batch processing completed in 8.82s
+2025-07-08 11:42:55,085 [INFO]  Performance: 1 hashes, 2 results, 0 unique IPs, 0 unique CVEs
+```
+
+### Frontend Server Logs:
+```
+🚀 Malwize Frontend Server
+📍 Serving on http://0.0.0.0:8080
+127.0.0.1 - - [08/Jul/2025 11:17:12] "GET /index.html HTTP/1.1" 200 -
+127.0.0.1 - - [08/Jul/2025 11:17:13] "GET /upload.html HTTP/1.1" 200 -
+127.0.0.1 - - [08/Jul/2025 11:17:16] "GET /hash_input.html HTTP/1.1" 200 -
+```
+
+---
+
+## APPENDIX D: WINDOWS 11 SPECIFIC NOTES
+
+### WSL2 Advantages:
+- Full Linux compatibility
+- Better performance than WSL1
+- Native Linux tools and commands
+- Easier dependency management
+
+### Native Windows Considerations:
+- Some dependencies may require Visual Studio Build Tools
+- Path separators use backslashes (`\`)
+- File permissions handled differently
+- Use Windows batch files instead of shell scripts
+
+### Windows Firewall:
+- Ensure ports 8000 and 8080 are allowed
+- Configure Windows Defender exclusions if needed
+- Use Windows Firewall with Advanced Security
+
+### Windows Services:
+- Consider running as Windows Services for production
+- Use Windows Task Scheduler for automated tasks
+- Configure Windows Event Log for monitoring
+
+---
+
+**For additional support, refer to the API documentation at `http://localhost:8000/docs` when the server is running.**
+
+**© 2025 Malwize Development Team. All rights reserved.** 

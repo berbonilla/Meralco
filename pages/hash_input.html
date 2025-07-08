@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hash Input - Malwize</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-left">
+            <span class="navbar-title">Malwize</span>
+        </div>
+        <div class="navbar-center">
+            <a href="index.html" class="nav-link">Dashboard</a>
+            <a href="upload.html" class="nav-link">Upload</a>
+            <a href="hash_input.html" class="nav-link active">Hash Input</a>
+            <a href="spreadsheet.html" class="nav-link">Spreadsheet</a>
+            <a href="results.html" class="nav-link">Results</a>
+            <a href="log.html" class="nav-link">Log</a>
+        </div>
+        <div class="navbar-right">
+            <button class="theme-toggle" onclick="toggleTheme()">Toggle Theme</button>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="header">
+            <h1>Hash Input & Analysis</h1>
+            <p>Enter hashes manually for quick malware analysis</p>
+        </div>
+        <div class="content">
+                <div class="api-section">
+                    <div class="section-header">Manual Hash Input</div>
+                    <div class="section-content">
+                        <div class="form-group">
+                            <label for="hashInput">Enter Hashes (one per line):</label>
+                            <textarea id="hashInput" class="form-control" rows="10" placeholder="Enter SHA256 hashes, one per line..."></textarea>
+                        </div>
+                        <button class="btn" onclick="scanHashes()">Scan Hashes</button>
+                </div>
+            </div>
+
+            <div class="results-section" id="resultsSection" style="display: none;">
+                <h2>Analysis Results</h2>
+                <div id="resultsContent"></div>
+                        </div>
+                        </div>
+                    </div>
+    <script src="script.js?v=1.3"></script>
+</body>
+</html> 

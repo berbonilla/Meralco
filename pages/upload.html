@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Files - Malwize</title>
+    <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-left">
+            <span class="navbar-title">Malwize</span>
+        </div>
+        <div class="navbar-center">
+            <a href="index.html" class="nav-link">Dashboard</a>
+            <a href="upload.html" class="nav-link active">Upload</a>
+            <a href="hash_input.html" class="nav-link">Hash Input</a>
+            <a href="spreadsheet.html" class="nav-link">Spreadsheet</a>
+            <a href="results.html" class="nav-link">Results</a>
+            <a href="log.html" class="nav-link">Log</a>
+        </div>
+        <div class="navbar-right">
+            <button class="theme-toggle" onclick="toggleTheme()">Toggle Theme</button>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="header">
+            <h1>Upload Files for Analysis</h1>
+            <p>Upload ZIP files, individual files, or hash lists for comprehensive malware analysis</p>
+        </div>
+        <div class="content">
+            <!-- API Status Section -->
+            <div class="api-section">
+                <div class="section-header">API Status & Configuration</div>
+                <div class="section-content">
+                    <div class="api-status" id="apiStatus">
+                        <!-- API status cards will be populated here -->
+                    </div>
+                    <div class="form-group">
+                        <label for="apiBaseUrl">API Base URL:</label>
+                        <input type="text" id="apiBaseUrl" class="form-control" value="http://localhost:8000" placeholder="Enter API base URL">
+                    </div>
+                    <button class="btn" onclick="testApiConnection()">Test Connection</button>
+                </div>
+            </div>
+
+            <!-- Upload Section -->
+                <div class="api-section">
+                <div class="section-header">File Upload</div>
+                    <div class="section-content">
+                        <div class="sample-data">
+                            <h4>Sample Data for Testing:</h4>
+                            <p><strong>Test Hash (EICAR):</strong></p>
+                        </div>
+
+                        <div class="form-group">
+                        <label>Upload Files:</label>
+                        <div class="file-upload" id="uploadArea" onclick="document.getElementById('fileInput').click()">
+                            <p>Click to upload files or drag and drop</p>
+                            <p style="font-size: 12px; color: var(--text-muted);">Supports ZIP, TXT, CSV, and individual files</p>
+                            </div>
+                        <input type="file" id="fileInput" multiple accept=".zip,.txt,.csv,.exe,.dll,.pdf,.doc,.docx" style="display: none;" onchange="handleFileInputChange(event)">
+                        </div>
+
+                        <div class="progress-bar" id="uploadProgress" style="display: none;">
+                            <div class="progress-fill" id="progressFill"></div>
+                        </div>
+                        
+                        <div class="form-group" style="margin-top: 15px;">
+                            <button class="btn" id="uploadBtn" onclick="triggerFileUpload()" style="display: none;">Upload Selected Files</button>
+                            <div id="uploadStatus" style="margin-top: 10px; display: none;"></div>
+                        </div>
+                </div>
+            </div>
+
+            <div class="results-section" id="resultsSection" style="display: none;">
+                <h2>Analysis Results</h2>
+                <div id="resultsContent"></div>
+                        </div>
+                    </div>
+                </div>
+    <script src="script.js?v=1.3"></script>
+</body>
+</html>     

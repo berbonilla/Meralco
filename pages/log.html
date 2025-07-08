@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Activity Log - Malwize</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-left">
+            <span class="navbar-title">Malwize</span>
+        </div>
+        <div class="navbar-center">
+            <a href="index.html" class="nav-link">Dashboard</a>
+            <a href="upload.html" class="nav-link">Upload</a>
+            <a href="hash_input.html" class="nav-link">Hash Input</a>
+            <a href="spreadsheet.html" class="nav-link">Spreadsheet</a>
+            <a href="results.html" class="nav-link">Results</a>
+            <a href="log.html" class="nav-link active">Log</a>
+        </div>
+        <div class="navbar-right">
+            <button class="theme-toggle" onclick="toggleTheme()">Toggle Theme</button>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="header">
+            <h1>Activity Log</h1>
+            <p>Monitor system activity and scan operations</p>
+        </div>
+        <div class="content">
+            <div class="api-section">
+                <div class="section-header">Activity Log</div>
+                <div class="section-content">
+                    <div class="log-section" id="logSection">
+                        <div class="log-entry log-info">Malwize Activity Log Loaded</div>
+                        <div class="log-entry log-info">Ready to monitor system activity</div>
+                    </div>
+                    <button class="btn btn-secondary" onclick="clearLog()">Clear Log</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="script.js?v=1.3"></script>
+    <script>
+        // Log functionality
+        function clearLog() {
+            const logSection = document.getElementById('logSection');
+            logSection.innerHTML = '';
+            showNotification('Log cleared', 'info');
+            log('info', 'Log cleared');
+        }
+
+        // Add some demo log entries
+            setTimeout(() => {
+            addLogEntry('info', 'System initialized successfully');
+        }, 1000);
+        
+                    setTimeout(() => {
+            addLogEntry('success', 'All services are running');
+        }, 2000);
+
+        function addLogEntry(level, message) {
+            const logSection = document.getElementById('logSection');
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = document.createElement('div');
+            logEntry.className = `log-entry log-${level}`;
+            logEntry.textContent = `[${timestamp}] ${message}`;
+            logSection.appendChild(logEntry);
+            logSection.scrollTop = logSection.scrollHeight;
+        }
+    </script>
+</body>
+</html> 

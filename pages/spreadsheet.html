@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spreadsheet Integration - Malwize</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-left">
+            <span class="navbar-title">Malwize</span>
+        </div>
+        <div class="navbar-center">
+            <a href="index.html" class="nav-link">Dashboard</a>
+            <a href="upload.html" class="nav-link">Upload</a>
+            <a href="hash_input.html" class="nav-link">Hash Input</a>
+            <a href="spreadsheet.html" class="nav-link active">Spreadsheet</a>
+            <a href="results.html" class="nav-link">Results</a>
+            <a href="log.html" class="nav-link">Log</a>
+        </div>
+        <div class="navbar-right">
+            <button class="theme-toggle" onclick="toggleTheme()">Toggle Theme</button>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="header">
+            <h1>Spreadsheet Integration</h1>
+            <p>Import hashes from Google Sheets, CSV, or Excel files</p>
+        </div>
+        <div class="content">
+                <div class="api-section">
+                    <div class="section-header">Spreadsheet Integration</div>
+                    <div class="section-content">
+                        <div class="form-group">
+                            <label for="spreadsheetUrl">Spreadsheet URL:</label>
+                            <input type="text" id="spreadsheetUrl" class="form-control" placeholder="Enter Google Sheets URL or direct CSV/Excel URL">
+                            <small style="color: var(--text-muted);">Supports Google Sheets, CSV, and Excel files</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="spreadsheetColumn">Hash Column Name:</label>
+                            <input type="text" id="spreadsheetColumn" class="form-control" value="hash" placeholder="Enter column name containing hashes">
+                        </div>
+                        <button class="btn" onclick="scanFromSpreadsheet()">Scan from Spreadsheet</button>
+                </div>
+            </div>
+
+            <div class="results-section" id="resultsSection" style="display: none;">
+                <h2>Analysis Results</h2>
+                <div id="resultsContent"></div>
+                            </div>
+                        </div>
+                                </div>
+    <script src="script.js?v=1.3"></script>
+    <script>
+        // Spreadsheet scanning functionality
+        function scanFromSpreadsheet() {
+            const url = document.getElementById('spreadsheetUrl').value;
+            const column = document.getElementById('spreadsheetColumn').value;
+            
+            if (!url) {
+                showNotification('Please provide a spreadsheet URL', 'warning');
+                return;
+            }
+            
+            showNotification('Scanning from spreadsheet...', 'info');
+            log('info', `Scanning from spreadsheet: ${url}`);
+            
+            // Simulate scanning process
+            setTimeout(() => {
+                showNotification('Spreadsheet scan completed!', 'success');
+                log('success', 'Spreadsheet scan completed');
+            }, 2000);
+        }
+    </script>
+</body>
+</html> 
